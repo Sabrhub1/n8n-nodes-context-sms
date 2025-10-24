@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-context-sms",
-  "version": "1.0.9",
+  "version": "1.1.1",
   "description": "n8n node for Context SMS integration",
   "keywords": [
     "n8n-community-node-package",
@@ -16,10 +16,6 @@
     "name": "Sabrhub",
     "email": "support@sabrhub.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sabrhub1/n8n-nodes-context-sms.git"
-  },
   "main": "index.js",
   "scripts": {
     "build": "tsc && gulp build:icons",
@@ -30,10 +26,9 @@
     "prepublishOnly": "npm run build && npm run lint -s"
   },
   "files": [
-    "dist",
+    "dist/**/*",
     "index.js",
-    "README.md",
-    "package.json"
+    "README.md"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
@@ -59,8 +54,5 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
-  },
-  "dependencies": {
-    "n8n-nodes-sabrhub": "^1.0.0"
   }
 }
