@@ -71,12 +71,10 @@ export class SabrhubApi implements ICredentialType {
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: '={{$credentials.environment === "production" ? $credentials.prodUrl : $credentials.devUrl}}',
-			url: '/outbound/send-sms',
+			url: '/enterprise/api-keys/validate',
 			method: 'POST',
 			body: {
-				toNumber: '+1234567890',
-				messageText: 'Test message from n8n',
-				fromNumber: '+1234567890',
+				apiKey: '={{$credentials.apiKey}}',
 			},
 		},
 	};
