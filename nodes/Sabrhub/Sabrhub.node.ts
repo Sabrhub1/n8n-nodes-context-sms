@@ -152,7 +152,7 @@ export class Sabrhub implements INodeType {
 						? credentials.prodUrl 
 						: credentials.devUrl;
 
-					const responseData = await this.helpers.requestWithAuthentication.call(
+					const responseData = await this.helpers.httpRequestWithAuthentication.call(
 						this,
 						'sabrhubApi',
 						{

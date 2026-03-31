@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-context-sms",
-  "version": "1.1.4",
+  "version": "1.1.7",
   "description": "n8n node for Context SMS integration",
   "keywords": [
     "n8n-community-node-package",
