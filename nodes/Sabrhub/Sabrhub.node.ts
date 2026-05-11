@@ -3,12 +3,14 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
+	NodeApiError,
 	NodeOperationError,
 } from 'n8n-workflow';
 
 export class Sabrhub implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Context SMS',
+		displayName: 'ContextSMS',
 		name: 'sabrhub',
 		icon: 'file:sabrhub.svg',
 		group: ['output'],
@@ -16,7 +18,7 @@ export class Sabrhub implements INodeType {
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Send SMS messages via Sabrhub API',
 		defaults: {
-			name: 'Context SMS',
+			name: 'ContextSMS',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -26,11 +28,6 @@ export class Sabrhub implements INodeType {
 				required: true,
 			},
 		],
-		requestDefaults: {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		},
 		properties: [
 			{
 				displayName: 'Resource',
@@ -61,17 +58,6 @@ export class Sabrhub implements INodeType {
 						value: 'send',
 						action: 'Send SMS',
 						description: 'Send an SMS message',
-						routing: {
-							request: {
-								method: 'POST',
-								url: '/outbound/send-sms',
-								body: {
-									toNumber: '={{$parameter.toNumber}}',
-									messageText: '={{$parameter.messageText}}',
-									fromNumber: '={{$parameter.fromNumber}}',
-								},
-							},
-						},
 					},
 				],
 				default: 'send',
@@ -152,19 +138,24 @@ export class Sabrhub implements INodeType {
 						? credentials.prodUrl 
 						: credentials.devUrl;
 
-					const responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'sabrhubApi',
-						{
-							method: 'POST',
-							url: `${baseURL}/outbound/send-sms`,
-							body: {
-								toNumber,
-								messageText,
-								fromNumber,
+					let responseData;
+					try {
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'sabrhubApi',
+							{
+								method: 'POST',
+								url: `${baseURL}/outbound/send-sms`,
+								body: {
+									toNumber,
+									messageText,
+									fromNumber,
+								},
 							},
-						},
-					);
+						);
+					} catch (error) {
+						throw new NodeApiError(this.getNode(), error as JsonObject);
+					}
 
 					returnData.push({
 						json: responseData,
